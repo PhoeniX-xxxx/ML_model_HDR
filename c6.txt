@@ -1,0 +1,6 @@
+import numpy as np
+IMG_SIZE = 28
+x_trainr = np.array(x_train).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+x_testr = np.array(x_test).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+print("Training samples dimension", x_trainr.shape)
+print("Testing samples dimension", x_testr.shape)

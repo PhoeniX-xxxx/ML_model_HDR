@@ -1,0 +1,1 @@
+mnist = tf.keras.datasets.mnist

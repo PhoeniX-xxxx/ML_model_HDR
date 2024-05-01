@@ -1,0 +1,1 @@
+newimg = np.array(newimg).reshape(-1, IMG_SIZE, IMG_SIZE, 1)

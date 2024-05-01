@@ -1,0 +1,45 @@
+font_scale = 1.5
+font = cv2.FONT_HERSHEY_PLAIN
+
+
+cap = cv2.VideoCapture('check.mp4')
+if not cap.isOpened():
+    cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    raise IOError("Cannot open video")
+
+
+text = "Some text in a box!"
+(text_width, text_height) = cv2.getTextSize(text, font, fontScale=font_scale, thickness=1)[0]
+text_offset_x = 10
+text_offset_y = img.shape[0] - 25
+
+box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y - text_height - 2))
+
+cntr = 0
+while True:
+    res, frame = cap.read()
+    if frame is None: break
+    cntr = cntr + 1
+    if cntr % 3 == 0:
+        frame = cv2.resize(frame,(0,0),None,0.65,0.65)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        resized = cv2.resize(gray, (28, 28), interpolation = cv2.INTER_AREA)
+        newimg = tf.keras.utils.normalize(resized, axis=1)
+        newimg = np.array(newimg).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+        predictions = model.predict(newimg)
+        status = np.argmax(predictions)
+        print(status)
+        print(type(status))
+
+        x1, y1, w1, h1 = 0, 0, 175, 175
+        cv2.rectangle(frame, (x1, x1), (x1 + w1, y1 + h1), (0, 255, 0), -1)
+        cv2.putText(frame, status.astype(str), (x1 + int(w1 / 5), y1 + int(h1 / 2)), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
+        cv2.imshow('Handwritten Digits Recognition', frame)
+
+        if cv2.waitKey(2) & 0xFF == ord('q'):
+            break
+
+cap.release()
+cv2.destroyAllWindows()

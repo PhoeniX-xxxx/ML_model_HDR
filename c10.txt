@@ -1,0 +1,1 @@
+resized = cv2.resize(gray, (28, 28), interpolation = cv2.INTER_AREA)
